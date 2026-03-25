@@ -1,0 +1,57 @@
+/* woekwewe */
+html { background:#595656; color: white;}
+textarea { resize: none; border: 1px Solid;}
+h1 { display: inline; margin: 0; padding: 0;}
+.container { width: 60%; margin: auto; }
+.nav { padding-left: 0px !important; padding:5px; }
+.overlay::after {position: fixed; top: 10%; left: 10%; font-size: 24px; color: white; content: "Click away to exit...";}
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.85);
+    z-index: 9999; 
+    display: flex;
+    justify-content: center; 
+    align-items: center; 
+    flex-direction: column; 
+    padding: 20px; 
+    box-sizing: border-box;
+}
+.mod {
+    color: rgb(182, 0, 0);
+}
+
+img:hover {
+    cursor: pointer;
+}
+
+a {
+    color:blueviolet;
+}
+
+textarea[disabled] {
+    background: darkgrey;
+}
+.replies {
+    margin: 2em;
+}
+
+#notification {
+    font-size: 24px;
+}
+
+.replies {
+    margin-left: 10px;
+}
+
+
+th {
+    text-align: left;
+}
+
+a {
+    color: rgb(161, 161, 161);
+}

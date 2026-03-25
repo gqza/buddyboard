@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>/buddy/</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+    <script src="{{ url_for('static', filename='jquery-3.7.1.slim.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='threads.js') }}"></script>
+</head>
+<body>
+    <div class="container">
+        {% include 'header.html' %}
+        <form action="/reply/{{ post.id }}" method="POST" class="post-form">
+            <table>
+                <tr>
+                    <th>Name</th>
+                    <td><textarea name="user" rows="1" cols="50" class="form-input"></textarea></td>
+                </tr>
+                <tr>
+                    <th>Image</th>
+                    <td><textarea name="image"  rows="1" cols="50" class="form-input"></textarea></td>
+                </tr>
+                <tr>
+                    <th>Content</th>
+                    <td><textarea name="data" placeholder="Text" rows="4" cols="50" class="form-input"></textarea></td>
+                    <input name="replying" value="{{post.id}}" type="hidden"></textarea>
+                    <td><button type="submit" class="submit-button">Post</button></td>
+                </tr>
+            </table>
+        </form>
+
+        <div class="posts">
+            <article class="post">
+                <div class="actions">
+                    <a href="#" onclick="toggleContent('content-{{ post.id }}', this); return false;">[-]</a>
+                    {% if post.ip == "127.0.0.1" and post.user == "*" %}<b class="mod">{{ mod }}</b> <span class="mod">[M]</span>{% else %}<b>{{ post.user }}</b>{% endif %} &bull;  
+                    {{post.yeahs}} <img src="{{ url_for('static', filename='yeah.png') }}" height=40 style="vertical-align: middle;" onclick='ratePost("{{ post.id }}", 1)'> <img src="{{ url_for('static', filename='nah.png') }}" height=40 style="vertical-align: middle;" onclick='ratePost("{{ post.id }}", -1)'><a href="#">Reply</a>
+                </div>
+                <div class="content-{{ post.id }}">
+                    {% if post.image %}
+                    <img src="https://{{proxy}}/?url={{ post.image }}" alt="Embedded image from {{ post.image }}" onclick="enlarge('{{post.image}}');" height="300">
+                    {% endif %}
+                    <p>{{ post.content | replace('\n', '<br>') | safe }}</p>
+                </div>
+            </article>
+            <a href="#" onclick="$('.replies').toggle(); $(this).text() == '[-]' ? '[+]' : '[-]'">[-]</a> {{ replies|count - 1}} replies...
+            <div class="replies">
+            {% for p in replies | reverse %}
+                {% if p.replying == post.id %}
+                    <article class="post">
+                        <div class="actions">
+                            <a href="#" onclick="toggleContent('content-{{ p.id }}', this); return false;">[-]</a>
+                            {{p.user}} &bull; 
+                            {{p.yeahs}} <img src="{{ url_for('static', filename='yeah.png') }}" height=40 style="vertical-align: middle;" onclick='ratePost("{{ p.id }}", 1)'> <img src="{{ url_for('static', filename='nah.png') }}" height=40 style="vertical-align: middle;" onclick='ratePost("{{ p.id }}", -1)'><a href="/reply/{{ p.id }}">Reply</a>
+                        </div>
+                        <div class="content-{{ p.id }}">
+                            {% if p.image %}
+                            <img src="https://{{proxy}}/?url={{ p.image }}" alt="Embedded image from {{ p.image }}" onclick="enlarge('{{p.image}}');" height="300">
+                            {% endif %}
+                            <p>{{ p.content | replace('\n', '<br>') | safe }}</p>
+                        </div>
+                    </article>
+                {% endif %}
+            {% else %}
+                <p>No messages yet. Be the first to post!</p>
+            {% endfor %}
+            </div>
+
+        </div>
+        <hr>
+        <small>This service is ran on buddyboard &bull; <a href="https://codeberg.org/zav/buddyboard">source code</a></small>
+    </div>
+    <script src="{{ url_for('static', filename='main.js') }}"></script>
+</body>
+</html>

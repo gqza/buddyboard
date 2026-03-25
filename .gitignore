@@ -1,0 +1,4 @@
+__pycache__/
+testing.json
+templates/test.html
+.env
